@@ -9,8 +9,8 @@
 5. `Watchify`  热加载js代码。当ts文件保存时自动编译
 
 ### 命令
-`npm install`
-`gulp`
-在`~/dist`文件夹中 运行命令 `anywhere 8000`
+- `npm install`
+- `gulp`
+- 在`~/dist`文件夹中 运行命令 `anywhere 8000`
 
 
