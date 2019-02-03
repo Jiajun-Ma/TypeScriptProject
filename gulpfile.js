@@ -8,11 +8,7 @@ var uglify = require('gulp-uglify');
 var sourcemaps = require('gulp-sourcemaps');
 var buffer = require('vinyl-buffer');
 
-var paths = {
-  pages: ['src/*.html']
-};
-
-
+// 设置保存自动编译
 var watchedBrowserify = watchify(browserify({
   basedir: '.',
   debug: true,
@@ -20,12 +16,19 @@ var watchedBrowserify = watchify(browserify({
   cache: {},
   packageCache: {}
 }).plugin(tsify));
+watchedBrowserify.on("update", bundle, copyHtml);
+watchedBrowserify.on("log", gutil.log);
 
-gulp.task("copy-html", function () {
+// 设置gulp任务
+gulp.task("copy-html", copyHtml);
+gulp.task("default", ["copy-html"], bundle);
+var paths = {
+  pages: ['src/*.html']
+};
+function copyHtml() {
   return gulp.src(paths.pages)
     .pipe(gulp.dest("dist"));
-});
-
+}
 function bundle() {
   return watchedBrowserify
     .bundle()
@@ -36,7 +39,3 @@ function bundle() {
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest("dist"));
 }
-
-gulp.task("default", ["copy-html"], bundle);
-watchedBrowserify.on("update", bundle);
-watchedBrowserify.on("log", gutil.log);
